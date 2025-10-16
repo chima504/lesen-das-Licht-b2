@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Lesen B2 - الضوء - Teil 1</title>
+<style>
+body { font-family: Arial, sans-serif; max-width: 1000px; margin: 30px auto; line-height: 1.6; background: #f4f4f4; color: #333; }
+h1 { text-align: center; color: #2c3e50; }
+.quiz-container { background: #FFE5B4; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
+.question-text { margin-top: 10px; font-weight: bold; }
+button { display: block; margin: 5px 0; padding: 8px 12px; font-size: 14px; cursor: pointer; border-radius: 5px; border: none; background: #3498db; color: #fff; transition: 0.3s; text-align: right; white-space: pre-line; }
+button:hover:not(.disabled) { background: #2980b9; }
+button.disabled { background: #bdc3c7; cursor: default; }
+.correct { background-color: #2ecc71 !important; color: #fff !important; }
+.wrong { background-color: #e74c3c !important; color: #fff !important; }
+#show-result { margin-top: 20px; background: #2ecc71; color: #fff; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+#result-container { display: none; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>Lesen B2 - الضوء - Teil 1</h1>
+
+<div id="quiz-area"></div>
+<button id="show-result">إظهار النتيجة والتصحيح</button>
+
+<div id="result-container">
+    <h2>نتيجتك</h2>
+    <p id="score"></p>
+</div>
+
+<script>
+const quiz = [
+    {
+        text: `Heute machen die elektrische Beleuchtung in Wohnhäusern, Straßenlaternen, Ampeln, Neonreklame
+und Scheinwerferlicht draußen die Nacht fast zum Tag.
+Vor der Erfindung der Elektrizität war das anders. Der Arbeitsalltag der Mensch wurde von den
+Jahreszeiten und vom Tageslicht bestimmt. Gearbeitet wurde von Sonnenaufgang bis
+Sonnenuntergang. Danach war Beleuchtung nur mit anderen Hilfsmitteln wie z. B. Feuer, Kerzen und
+Petroleum möglich.
+Das Museum für Dorfkultur in Weinheim zeigt in einer Sonderausstellung, wie sich das Landleben
+früher nach Einbruch der Dunkelheit abspielte. Man erfährt zum Beispiel, wie man vor Erfindung des
+Streichholzes Feuer entfachte. Es geht um die Bedeutung der Kerzen im bäuerlichen Leben und
+darum, welche weitreichenden Umbrüche die Erfindung der Gasbeleuchtung und des elektrischen
+Lichts mit sich brachte.`,
+        options: [
+            "a) Der Wald als neues Zuhause.",
+            "b) Die Auswirkungen künstlichen Lichts.",
+            "c) Landbewohner fordern besseren öffentlichen Nahverkehr.",
+            "d) Plötzlich geht das Licht aus - was tun bei Stromeausfall?",
+            "e) Stadtbewohner entdecken das Landleben.",
+            "f) Stadtbewohner leben umweltfreundlicher.",
+            "g) Trend: Großstädter machen Urlaub im Wald.",
+            "h) Warum Licht für unser Wohlbefinden wichtig ist.",
+            "i) Was tun, wenn es Nacht wird? Lichtquellen vergangener Zeiten.",
+            "j) Wohnungsnot in Metropolen."
+        ],
+        answer: 8
+    },
+    {
+        text: `Jahrelang zog es vor allem junge Berufstätige in die Großstädte – denn diese sind attraktiv, bieten
+umfangreiche Einkaufsmöglichkeiten und einen gut ausgebauten öffentlichen Nahverkehr.
+Doch seit einiger Zeit beobachten Forscher eine gegenläufige Bewegung: Immer mehr Menschen
+kehren den Metropolen den Rücken und lassen sich im Umland nieder – wegen der Ruhe und der
+günstigeren Preise.
+Die Städte, die immer teurer werden, die Freiräume, die der ländliche Raum bietet, sowie die neuen
+Formen des digitalen Arbeitens begünstigen die Stadtflucht.
+Unter den neuen Landbewohnern finden sich einerseits Berufstätige, die ortsunabhängig arbeiten
+können, wie Programmierer, Journalisten oder Grafikdesigner, andererseits aber zum Beispiel auch
+Lehrer, Ärzte und Handwerker, heißt es in der Studie.
+Die Wissenschaftler sprechen schon von einer Trendwende, die sich vor allem in den Ballungszentren
+Berlin, Hamburg, München, Frankfurt und Stuttgart abzeichnet.`,
+        options: [
+            "a) Der Wald als neues Zuhause.",
+            "b) Die Auswirkungen künstlichen Lichts.",
+            "c) Landbewohner fordern besseren öffentlichen Nahverkehr.",
+            "d) Plötzlich geht das Licht aus - was tun bei Stromeausfall?",
+            "e) Stadtbewohner entdecken das Landleben.",
+            "f) Stadtbewohner leben umweltfreundlicher.",
+            "g) Trend: Großstädter machen Urlaub im Wald.",
+            "h) Warum Licht für unser Wohlbefinden wichtig ist.",
+            "i) Was tun, wenn es Nacht wird? Lichtquellen vergangener Zeiten.",
+            "j) Wohnungsnot in Metropolen."
+        ],
+        answer: 4
+    },
+    {
+        text: `Satellitenbilder der Erde bei Nacht zeigen ein strahlendes Lichtermeer, das sich fast durchgehend über
+den Globus erstreckt.
+Seit der Erfindung der Glühbirne steht Licht für Wohlstand und Fortschritt.
+Die Städte sind nachts hell erleuchtet – nicht immer jedoch zum Wohle von Mensch und Umwelt:
+Denn zu viel Licht hat Folgen für Menschen und Tiere.
+An Straßenlaternen verenden jede Nacht Milliarden von Insekten, Zugvögel verlieren die
+Orientierung, und selbst der Mensch wird durch das Kunstlicht um einen gesunden Schlaf gebracht.
+Wissenschaftler sprechen bereits von einer massiven Lichtverschmutzung.
+Weltweit gehen Forscher jetzt der Frage nach, wie sich die Lichtflut auf ein gesundes Maß reduzieren
+lässt.
+Dabei arbeiten Physiker, Biologen, Mediziner und Ingenieure an der Beleuchtung der Zukunft – an
+einem Licht, das weder Energie verschwendet noch unnötig den Nachthimmel erhellt, keine Insekten
+verenden lässt und durch besondere Farbspektren auch den Menschen unbehelligt schlafen lässt.
+Denn es geht nicht darum, die Städte völlig dunkel zu machen.
+Es geht darum, sie nachhaltiger und intelligenter zu beleuchten.`,
+        options: [
+            "a) Der Wald als neues Zuhause.",
+            "b) Die Auswirkungen künstlichen Lichts.",
+            "c) Landbewohner fordern besseren öffentlichen Nahverkehr.",
+            "d) Plötzlich geht das Licht aus - was tun bei Stromeausfall?",
+            "e) Stadtbewohner entdecken das Landleben.",
+            "f) Stadtbewohner leben umweltfreundlicher.",
+            "g) Trend: Großstädter machen Urlaub im Wald.",
+            "h) Warum Licht für unser Wohlbefinden wichtig ist.",
+            "i) Was tun, wenn es Nacht wird? Lichtquellen vergangener Zeiten.",
+            "j) Wohnungsnot in Metropolen."
+        ],
+        answer: 1
+    },
+    {
+        text: `Vor zehn Jahren lebten Dirk und Antje Sebens noch in Mannheim, mitten in der Stadt.
+Dann kauften sie sich ein altes Forsthaus im Wald. Sie hatten es zufällig entdeckt, denn eigentlich hatten
+sie nur einen ruhigen Ort gesucht, um am Wochenende dem Stadtleben entfliehen zu können. Doch sie
+waren sofort von dem Haus begeistert. Dass es dort weder Strom noch fließendes Wasser gab, schreckte
+sie nicht ab.
+Heute versuchen die beiden, so autark wie möglich zu leben:
+– Die Solaranlage auf dem Dach liefert Strom,
+– eigenes Holz die Wärme,
+– der Brunnen vor dem Haus das Wasser.
+Im Sommer bauen Dirk und Antje Sebens Gemüse an, das sie für den Winter einwecken.
+Das nächste Dorf ist mehrere Kilometer entfernt, und außer Besuchern verirrt sich höchstens mal ein
+Wanderer zu ihnen. „Die absolute Dunkelheit draußen in der Nacht war am Anfang sehr ungewohnt“,
+erzählt Antje Sebens. Denn elektrische Straßenlaternen wie in der Stadt gibt es im Wald natürlich nicht.
+Bereut haben die beiden ihre Entscheidung nie. Noch immer empfinden sie es als großes Abenteuer,
+mitten in der Natur zu sein und auf viele Annehmlichkeiten zu verzichten.`,
+        options: [
+            "a) Der Wald als neues Zuhause.",
+            "b) Die Auswirkungen künstlichen Lichts.",
+            "c) Landbewohner fordern besseren öffentlichen Nahverkehr.",
+            "d) Plötzlich geht das Licht aus - was tun bei Stromeausfall?",
+            "e) Stadtbewohner entdecken das Landleben.",
+            "f) Stadtbewohner leben umweltfreundlicher.",
+            "g) Trend: Großstädter machen Urlaub im Wald.",
+            "h) Warum Licht für unser Wohlbefinden wichtig ist.",
+            "i) Was tun, wenn es Nacht wird? Lichtquellen vergangener Zeiten.",
+            "j) Wohnungsnot in Metropolen."
+        ],
+        answer: 0
+    },
+    {
+        text: `Wer verbringt nicht gerne sein Wochenende fernab der Stadt?
+Im Grünen, wo es noch Wiesen und Schmetterlinge gibt und weder Staus noch Lärm.
+Viele zieht es gleich ganz aufs Land. Doch dort braucht man meist ein Auto.
+Wer nicht im Home-Office arbeite kann, wird zum Pendler.
+Hinzu kommt, dass es in vielen Dörfern kaum noch Einkaufsmöglichkeiten oder Schulen gibt und der
+öffentliche Nahverkehr in ländlichen Regionen schlecht ausgebaut ist – viele Dorfbewohner können
+nicht ohne PKW auskommen.
+Forscher haben errechnet, dass wir bis zu 87 Prozent der Emissionen aus unserer Alltagsmobilität
+einsparen können, wenn wir in verkehrstechnisch günstiger Lage wohnen,
+also am besten in der Stadt – mit Einkaufsmöglichkeiten und einem Carsharing-Standort vor der Tür.
+Auch das Argument, das Wohnen auf dem Land sei günstiger, überzeugt immer weniger.
+Zwar waren dort früher Mieten und Baugrund auf dem Land vergleichsweise erschwinglich,
+wird heute das Preisgefälle zwischen Stadt und Land immer flacher.
+Das Ergebnis könnte ernüchternd sein.
+Und das Leben in der Stadt attraktiver machen.`,
+        options: [
+            "a) Der Wald als neues Zuhause.",
+            "b) Die Auswirkungen künstlichen Lichts.",
+            "c) Landbewohner fordern besseren öffentlichen Nahverkehr.",
+            "d) Plötzlich geht das Licht aus - was tun bei Stromeausfall?",
+            "e) Stadtbewohner entdecken das Landleben.",
+            "f) Stadtbewohner leben umweltfreundlicher.",
+            "g) Trend: Großstädter machen Urlaub im Wald.",
+            "h) Warum Licht für unser Wohlbefinden wichtig ist.",
+            "i) Was tun, wenn es Nacht wird? Lichtquellen vergangener Zeiten.",
+            "j) Wohnungsnot in Metropolen."
+        ],
+        answer: 5
+    }
+];
+
+const quizArea = document.getElementById("quiz-area");
+let userAnswers = Array(quiz.length).fill(null);
+
+quiz.forEach((teil, index) => {
+    const container = document.createElement("div");
+    container.className = "quiz-container";
+
+    const textEl = document.createElement("p");
+    textEl.innerText = teil.text;
+    container.appendChild(textEl);
+
+    teil.options.forEach((opt, oIndex) => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = (e) => {
+            const allBtns = e.target.parentElement.querySelectorAll("button");
+            allBtns.forEach(b => {
+                b.classList.remove("disabled");
+                b.disabled = false;
+            });
+
+            userAnswers[index] = oIndex;
+            e.target.classList.add("disabled");
+            e.target.disabled = true;
+        };
+        container.appendChild(btn);
+    });
+
+    quizArea.appendChild(container);
+});
+
+document.getElementById("show-result").onclick = () => {
+    let score = 0;
+    quiz.forEach((teil, index) => {
+        const correct = teil.answer;
+        const selected = userAnswers[index];
+        const container = quizArea.children[index];
+        const buttons = container.querySelectorAll("button");
+
+        buttons.forEach((btn, oIndex) => {
+            btn.disabled = true;
+            if(oIndex === correct) btn.classList.add("correct");
+            if(selected === oIndex && selected !== correct) btn.classList.add("wrong");
+        });
+
+        if(selected === correct) score++;
+    });
+
+    document.getElementById("score").innerText = `النقاط: ${score*5} / 25`;
+    document.getElementById("result-container").style.display = "block";
+};
+</script>
+</body>
+</html>
+<h1>Lesen B2 - Umwelt - Teil 2</h1>
+
+<div class="quiz-container">
+    <p>
+        Der Puppenmacher:<br>
+        Die Schaufensterpuppe ist eine Pariserin und hatte erstmals 1849 in der Hauptstadt der Mode ihren
+        Auftritt. Der französische Schneider Alexis Lavigne gilt als ihr Erfinder, auch wenn er damals seine
+        Kleiderkreationen noch auf einer Schneiderpuppe vorführte.
+        Bald schon taten es ihm andere Pariser Kollegen gleich. Sie begannen, ihre Modelle vor den Geschäften
+        aufzustellen, um die Passanten in die Verkaufsräume zu locken. Als Anfang des 20. Jahrhunderts die
+        ersten großen Kaufhäuser eröffneten, erlebte die Schaufensterpuppe ihren Durchbruch.
+        Der Puppenmacher Lester Gaba entwickelte in den 1930er Jahren das erste lebensecht wirkende Model,
+        Cynthia. Sie durfte sogar mit auf Veranstaltungen, was beide berühmt machte.
+        Fortan spiegelte die Schaufensterpuppe Zeitgeist und Schönheitsideale.
+    </p>
+
+    <!-- سؤال 1 -->
+    <p class="question-text">1) Die erste Schaufensterpuppe wurde ...</p>
+    <button data-correct="false">a) Anfang des 20. Jahrhunderts von einem Puppenmacher erschaffen.</button>
+    <button data-correct="false">b) für die ersten großen Kaufhäuser produziert.</button>
+    <button data-correct="true">c) von einem französischen Schneider erfunden.</button>
+
+    <!-- سؤال 2 -->
+    <p class="question-text">2) Bei der Restaurierung der Schaufensterpuppen ..</p>
+    <button data-correct="true">a) darf Herr Bauernfeind keinen normalen Nagellack auftragen.</button>
+    <button data-correct="false">b) können keine Luxusmarken eingesetzt werden.</button>
+    <button data-correct="false">c) verwendet er nur billige Produkte.</button>
+
+    <!-- سؤال 3 -->
+    <p class="question-text">3) Der Puppenmacher ...</p>
+    <button data-correct="false">a) hat schon als Kind gerne mit Puppen gespielt.</button>
+    <button data-correct="true">b) konnte seine erste Schaufensterpuppe nicht auf einmal zahlen.</button>
+    <button data-correct="false">c) organisierte eine Ausstellung mit Schaufensterpuppen.</button>
+
+    <!-- سؤال 4 -->
+    <p class="question-text">4) Herr Bauernfeind ...</p>
+    <button data-correct="false">a) eröffnete die erste Linzer Firma für Schaufensterpuppen.</button>
+    <button data-correct="true">b) handelt mit Schaufensterpuppen anderer Produzenten.</button>
+    <button data-correct="false">c) stellt heute keine Schaufensterpuppen mehr her.</button>
+
+    <!-- سؤال 5 -->
+    <p class="question-text">5) Schaufensterpuppen ...</p>
+    <button data-correct="true">a) können mit umweltfreundlichen Farben bemalt werden.</button>
+    <button data-correct="false">b) sind nicht von Tendenzen der Mode abhängig.</button>
+    <button data-correct="false">c) sollen immer die gleiche.</button>
+
+    <p class="feedback"></p>
+</div>
+
+<!-- زر النتيجة النهائية -->
+<div style="background:#fff;padding:20px;margin-top:20px;border-radius:8px;">
+    <button id="show-result-2">إظهار النتيجة النهائية للتمرين 2</button>
+    <p id="score-2" style="font-weight:bold;"></p>
+</div>
+
+<script>
+document.querySelectorAll(".quiz-container").forEach(container => {
+    container.querySelectorAll("button[data-correct]").forEach(btn => {
+        btn.onclick = () => {
+            const siblings = btn.parentElement.querySelectorAll("button[data-correct]");
+            siblings.forEach(s => s.classList.remove("selected"));
+            btn.classList.add("selected");
+        };
+    });
+});
+
+document.getElementById("show-result-2").onclick = function() {
+    const correctButtons = document.querySelectorAll('.quiz-container button[data-correct="true"]');
+    const allButtons = document.querySelectorAll('.quiz-container button[data-correct]');
+    let score = 0;
+
+    correctButtons.forEach(btn => {
+        if (btn.classList.contains("selected")) {
+            score++;
+        }
+    });
+
+    allButtons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.correct === "true") {
+            btn.style.backgroundColor = "lightgreen";
+        } else if (btn.classList.contains("selected") && btn.dataset.correct === "false") {
+            btn.style.backgroundColor = "#ff7f7f";
+        }
+    });
+
+    const total = correctButtons.length;
+    document.getElementById("score-2").textContent = `النقاط: ${score * 5} / ${total * 5}`;
+};
+</script>
+
+<div id="quiz-area-3"></div>
+</div>
+<body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Lesen B2 - Freizeit & Natur - Teil 3</title>
+<style>
+body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; background-color: #f5f5f5; }
+h1 { text-align: center; margin-bottom: 20px; }
+.question { background-color: #ffe0b2; padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.question p { margin-bottom: 10px; }
+.question label { display: block; margin-bottom: 5px; cursor: pointer; background-color: #fff; padding: 5px; border-radius: 3px; }
+.question label.selected { background-color: #ddd; }
+.question label.correct { background-color: #c8e6c9; }
+.question label.incorrect { background-color: #ffcdd2; }
+button { padding: 10px 20px; font-size: 16px; cursor: pointer; border: none; border-radius: 5px; background-color: #2196F3; color: #fff; }
+button:hover { background-color: #1976D2; }
+#result-container { margin-top: 20px; padding: 15px; background-color: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: none; }
+</style>
+</head>
+<body>
+
+<h1>Lesen B2 - Umwelt - Teil 3</h1>
+
+<div id="quiz-area">
+
+<!-- Question 1 -->
+<div class="question" data-correct="1">
+  <h3>Text 1: Das große Aufräumbuch</h3>
+  <p>Mit ihrer Aufräummethode hat die aus dem Fernsehen bekannte Wohnberaterin und Bestsellerautorin Mila Komanek das Leben vieler Menschen verändert. Nun hat sie einen neuen, schön illustrierten Ratgeber erstellt. Ihr Tipp: Behalten Sie nur Gegenstände, die Ihnen wichtig sind! Ihre Schritt-für-Schritt-Anleitungen helfen Ihnen dabei, Dinge, die Sie nicht mehr brauchen, auszusortieren und wegzuwerfen: zum Beispiel alte Kleidung und Schuhe, Bücher und Papiere oder Kochutensilien, die nie benutzt werden. Außerdem zeigt Mila Komanek, wie man perfekt Schubladen und Schränke organisiert. Denn sie ist überzeugt: Durch die richtige Ordnung in der Wohnung wird das ganze Leben leichter. Gebundene Ausgabe: 19€</p>
+
+  <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+
+<!-- Question 2 -->
+<div class="question" data-correct="4">
+<h3>Text 2: Einrichtungshaus Unterberg – das exklusive Möbelhaus</h3>
+<p>Im Zentrum der Stadt Hildesheim findet sich auf über 5 Etagen eine exzellente Auswahl erstklassiger moderner Möbel. Wenn Sie Wert auf eine erlesene Wohnungseinrichtung legen, finden Sie bei uns alles nach Ihrem Geschmack. Erleben Sie eine der schönsten Möbelausstellungen Niedersachsens und lassen Sie sich inspirieren. Bei unserer Auswahl an neuen Möbeln legen wir großen Wert auf: hervorragende Verarbeitung, beste Materialien, und überzeugendes Design. Wir verkaufen: Polstermöbel, Wohnzimmereinrichtungen, Garten- und Balkonmöbel, Garderoben und mehr. Einrichtungshaus Unterberg Neue Straße 8 31134 Hildesheim</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+<!-- Question 3 -->
+<div class="question" data-correct="0">
+<h3>Text 3: Geschichten für Kinder</h3>
+<p>Neu im Programm – Kinderbücher schreiben: der Basiskurs. Kinder sind besondere Leser. Sie wollen Spaß und Spannung erleben und neue Welten entdecken. Das ist eine große, aber auch schöne Herausforderung für Autoren. Unser Basiskurs vermittelt das notwendige handwerkliche Können dafür. Themen: kindgerechte Geschichten erzählen, ein Buchkonzept entwickeln, Figuren entwerfen, Illustrationen für Kinderbücher, Veröffentlichung und Verlagssuche. Für Einsteiger und Fortgeschrittene, für angehende Kinderbuchautoren und für alle, die nur mal reinschnuppern möchten. Schreibakademie Konstanz Info und Kontakt: mail@schreibakademie-konstanz.de</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+<!-- Question 4 -->
+<div class="question" data-correct="9">
+<h3>Text 4: Helden der Kindheit</h3>
+<p>Pippi Langstrumpf, der kleine Wassermann und viele andere Helden aus Kinderbüchern sind im Historischen Museum zu Gast! Kommen Sie mit auf eine Entdeckungstour durch die Phantasiewelten der Kinderbuchliteratur des 20. und 21. Jahrhunderts. Ausgestellt werden zahlreiche Originalfiguren und Requisiten aus Verfilmungen und Puppenspielen, unter anderem das Fahrzeug aus „Robbi, Tobbi und das Fliewatüüt“ und einige Möbel aus der Villa Kunterbunt. Die Ausstellung gibt auch Einblicke in die Arbeit von Kinderbuchautoren. Zahlreiche Spiele laden Kinder und Erwachsene zum Mitmachen ein. Historisches Museum Kassel. Konrad-Zuse-Str. 3, 34123 Kassel</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+
+<!-- Question 5 -->
+<div class="question" data-correct="3">
+<h3>Text 5: Henrike Derendorf: Das neue Wohnbuch – 1000 Ideen für ein schönes Zuhause</h3>
+<p>Hier werden Wohnträume wahr: Wie plant man das ideale Wohnzimmer oder ein gemütliches Schlafzimmer? Und wie macht man das Beste aus kleinen Räumen? Passt die gelbe oder die blaue Tapete besser? Dieses Buch liefert die Antworten, führt in die Kunst der optimalen Raumgestaltung ein und erklärt verschiedene Stilrichtungen. Die Texte sind vielfältig, informativ und enthalten zahlreiche Hinweise von Experten. Ausführliche Produktinformationen und eine Hersteller- sowie Shop-Liste runden das Angebot dieses Wohnratgebers ab. Heute schon an morgen denken: Welche Trends werden das Wohnen in der Zukunft prägen? Wie werden wir im Alter leben?</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+
+<!-- Question 7 -->
+<div class="question" data-correct="6">
+<h3>Text 6: Wohngemeinschaftlich leben</h3>
+<p>Wohngemeinschaften – nicht nur für Studenten, sondern auch für Senioren, Mehrgenerationenhäuser oder ganz was anderes? Neue, innovative Wohnkonzepte werden immer wichtiger. In dem Vortrag werden einige gelungene Wohnprojekte vorgestellt, die zeigen, wie man in Zukunft – und auch schon heute – wohnen und leben kann. Referent: Dr. Anton Schroeter. Montag, 15.9., 19:30 Uhr Teilnahmegebühr: 10 €. Anmeldung erforderlich. vhs-Zentrum. Am Marktplatz 8, 06108 Halle</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+
+<!-- Question 8 -->
+<!-- Text 7 -->
+<div class="question" data-correct="7">
+<h3>Text 7: Katze, Papagei, Meerschweinchen – was ist erlaubt?</h3>
+<p>Muss ich den Vermieter fragen, wenn ich mir ein Haustier anschaffen will? Was soll ich tun, wenn die Nachbarn sich beschweren? Solche und ähnliche Fragen stellen sich viele Mieter, die gerne Haustiere hätten. In unserer Vortragsreihe rund um das Mietrecht versuchen wir, sie zu beantworten. Unser nächster Vortrag findet am Dienstag, 7. Juli, um 19 Uhr statt. Die Juristin Dr. Anke Wischnewski spricht über das Thema „Tiere im Mietrecht“. Volkshochschule Bendorf. Hauptstr. 4, 56170 Bendorf</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+
+<!-- Question 9 -->
+<div class="question" data-correct="0">
+<h3>Text 8: Kleine Helden</h3>
+<p>Gehen in den Büchern des Kinderbuchverlags Maus & Sandmann auf große Reisen und erleben spannende Abenteuer. Die liebevoll illustrierten Geschichten vermitteln kindgerechtes, interessantes Wissen. Wir bieten Praktikanten die Möglichkeit, die verschiedenen Aufgaben im Verlagswesen kennenzulernen, z. B. Pressearbeit, Programmplanung, Lektorat, Marketing, Vertrieb. Wir suchen Studenten (m/w), die im Rahmen eines Praktikums unsere Buchprojekte begleiten wollen. Voraussetzung ist, dass Sie schon mindestens zwei Semester an einer Hochschule studiert haben. Kontakt: Kinderbuchverlag Maus & Sandmann. Schifferstr. 8, 09116 Chemnitz www.maus-und-sandmann.de/praktikum</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+<!-- Question 9 -->
+<div class="question" data-correct="10">
+<h3>Text 9: Rat mal, wo die Tiere wohnen!</h3>
+<p>Wie schlau sind Bienen? Welche Tiere leben im Garten? Der Zoologe Dirk Gorissen nimmt junge Forscher mit auf eine Entdeckungsreise. Er lädt dazu ein, die Welt der heimischen Tiere zu erkunden und direkt vor der Haustür damit zu beginnen. Er begleitet uns zu den Tieren im Wald, im Garten, am Wasser und im Haus. Vom Glühwürmchen bis zum Fuchs – man wird eine Menge Neues über Tiere erfahren! Für alle Kinder und Neugierigen ab 6 Jahren zum Vorlesen und Selberlesen. Gebundenes Buch, 18€</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+
+<!-- Question 9 -->
+<div class="question" data-correct="2">
+<h3>Text 10: Tiere hautnah erleben</h3>
+<p>Bei uns finden heimische Wildtiere, aber auch Exoten aus aller Welt ein artgerechtes Zuhause. Für die kleinen und großen Besucher des Waldzoos gibt es bei einem Rundgang viel zu bestaunen! Gehen Sie auf Tuchfühlung mit unseren Lieblingen! Viele unserer Tiere lassen sich gerne mal streicheln. Auch das Füttern ist hier und da möglich. Sind Sie schon neugierig geworden? Dann nichts wie los! Öffnungszeiten: Dienstag bis Sonntag: 10 bis 18 Uhr Eintritt: Erwachsene 2,50 €, Kinder 2 €. Waldzoo. Montabaur, Waldstr. 12, 56410 Montabaur</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+
+
+<!-- Question 10 -->
+<div class="question" data-correct="0">
+<h3>Text 11: Willst du Tierexperte werden?</h3>
+<p>Dann komm ins Familienzentrum Linz. Bei fünf Treffen lernen wir alles über die Tiere in Haus und Hof und beantworten Fragen wie: Wo schlafen Kühe? Darf ich einen fremden Hund streicheln? Was frisst mein Kaninchen am liebsten? Außerdem machen wir spannende Ausflüge und am Ende bekommst du sogar ein Diplom. Tierärztin Karla Herbst lädt Kinder zwischen 7 und 12 Jahren ein, mehr über die Bedürfnisse von Tieren zu erfahren. Wir freuen uns auf dich! Familienzentrum Linz in Zusammenarbeit mit dem Tierheim Linz Teilnahmegebühr: 4 € Anmeldung: info@familienzentrum-linz.net</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+
+<!-- Question 12 -->
+<div class="question" data-correct="5">
+<h3>Text 12: Wohnen in der Gründerzeit</h3>
+<p>In einer Ausstellung im Schloss Britz erfahren die Besucher alles über die Wohnungseinrichtung in der Gründerzeit. Die originalen Möbel vermitteln anschaulich und lebendig das Wohn- und Lebensgefühl des ausgehenden 19. Jahrhunderts. In der Gründerzeit (1870 bis 1914) entstand eine besondere Wohnkultur. Das aufstrebende Bürgertum wollte seinen neu errungenen Wohlstand in einer repräsentativen Architektur des Hauses und einer luxuriösen Innenausstattung mit hochwertigem Mobiliar zeigen. Öffnungszeiten: Dienstags bis sonntags von 11 bis 18 Uhr Eintritt: 3 Euro, ermäßigt 2 Euro, bis 12 Jahre frei Schloss Britz, Alt-Britz 73, 12359 Berlin</p>
+
+ <label><input type="radio" name="q1" value="0"> Keine Antwort</label>
+  <label><input type="radio" name="q1" value="1"> Alle Ihre Schränke sind voll mit Sachen und Sie haben kaum mehr Platz in der Wohnung. Sie suchen Ideen, wie Sie das ändern können.</label>
+  <label><input type="radio" name="q1" value="2"> Eine Bekannte möchte mit ihrer Familie einen Ausflug machen und dabei am liebsten Tiere beobachten.</label>
+  <label><input type="radio" name="q1" value="3"> Eine Bekannte zieht um und sucht Tipps zu Einrichtung und Wandfarben.</label>
+  <label><input type="radio" name="q1" value="4"> Ihr Bruder sucht ein hochwertiges neues Sofa.</label>
+  <label><input type="radio" name="q1" value="5"> Ihr Vater interessiert sich für alte wertvolle Möbel.</label>
+  <label><input type="radio" name="q1" value="6"> Ihr Cousine studiert und würde gern in eine Wohngemeinschaft ziehen.</label>
+  <label><input type="radio" name="q1" value="7"> Ihre Schwester möchte wissen, ob sie in ihre Mietwohnung einen Hund halten darf.</label>
+  <label><input type="radio" name="q1" value="8"> Ihre Tochter geht zur Schule und sucht einen Praktikumsplatz.</label>
+  <label><input type="radio" name="q1" value="9"> Sie möchten eine Ausstellung besuchen, die auch für ihre Kinder interessant ist.</label>
+  <label><input type="radio" name="q1" value="10"> Sie suchen ein Kinderbuch für Ihren siebenjährigen Sohn. Er möchte gerne mehr über Tiere.</label>
+</div>
+
+<!-- باقي الصفحة كاملة -->
+
+<button id="checkAnswers">Ergebnisse anzeigen</button>
+
+<script>
+document.getElementById("checkAnswers").addEventListener("click", function() {
+  const questions = document.querySelectorAll(".question");
+
+  questions.forEach(q => {
+    const correctValue = q.dataset.correct;
+    const inputs = q.querySelectorAll("input[type='radio']");
+
+    inputs.forEach(input => {
+      const label = input.parentElement;
+      label.style.backgroundColor = ""; // نحيد أي لون قديم
+
+      // ✅ إذا الجواب هو الصحيح، نوليه أخضر (سواء اختار المستخدم أو لا)
+      if (input.value === correctValue) {
+        label.style.backgroundColor = "lightgreen";
+      }
+
+      // ❌ إذا المستخدم اختار جواب خاطئ، نوليه أحمر
+      if (input.checked && input.value !== correctValue) {
+        label.style.backgroundColor = "lightcoral";
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
